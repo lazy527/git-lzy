@@ -1,0 +1,129 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        char choose;
+        Scanner sc = new Scanner(System.in);
+        boolean a = true;
+        do {
+            System.out.println("    ==============================");
+            System.out.println("             欢迎使用密码管理系统      ");
+            System.out.println("    ==============================");
+            System.out.println("               请选择操作：      ");
+            System.out.println("        1.加密      ");
+            System.out.println("        2.解密      ");
+            System.out.println("        5.退出      ");
+            System.out.println("请输入选项：");
+            choose = sc.next().charAt(0);
+            switch (choose) {
+                case '1':
+                    encryption();             //加密
+                    break;
+                case '2':
+                    decode();             // 解密
+                    break;
+                case '5':                      //退出
+                    a=false;
+                    break;
+                default:
+                    System.out.println("输入错误,请重试");
+                    break;
+            }
+        }while (a) ;
+    }
+    static void encryption(){                            //加密
+        System.out.println("请输入要加密的密码：");
+        Scanner s = new Scanner(System.in);
+        String string = s.nextLine();                      //string -- string
+        StringBuffer code = new StringBuffer(string);      //code --buffer
+        if(code.length() >= 16){
+            System.out.println("密码长度不超过16");
+        } else if (judge(code)) {                  //密码没错
+            System.out.println("加密中……");           //开始加密
+            produce(string);                        //加密
+        }
+    }
+    static boolean judge(StringBuffer code){
+        for (int i = 0; i< code.length() ; i++) {                 //判断长度
+            if(Problem(code.charAt(i))){
+                System.out.println("非法密码（要数字或字母）");
+                return false;                   //有问题
+            }
+        }
+        return true;                            //没错
+    }
+    static boolean Problem(char code){               //判断字母和数字
+        if(code > '9' || code <'0'){
+            if(code > 'z' || code <'a'){
+                if(code > 'Z' || code <'A'){
+                    return true;                //有问题
+                }
+            }
+        }
+        return false;                         //没错
+    }
+    static void produce(String code){
+        char[] codeNew = code.toCharArray();
+        int count = 0;
+        for (int i = 0; i < codeNew.length; i++) {
+    //      count = codeNew[i] + i + 4;
+    //      codeNew[i] = (char)count;
+            codeNew[i]+= i + 4;
+
+//            System.out.print(codeNew[i]);                         //偏移
+
+        }
+
+ //       System.out.println("\n=======================");            //交换
+
+        char random = codeNew[0];
+        codeNew[0] = codeNew[codeNew.length - 1];
+        codeNew[codeNew.length - 1] = random;
+        code = String.copyValueOf(codeNew);
+
+  //      System.out.println(code+"\n============================");            //反转
+
+        StringBuffer passwordNew = new StringBuffer(code);
+        passwordNew = passwordNew.reverse();
+        System.out.println("加密后的密码："+passwordNew);
+    }
+    static void decode(){                                 // 解密
+            System.out.println("请输入要解密的密码：");
+            Scanner sc = new Scanner(System.in);
+            String string = sc.nextLine();                        //string--string
+            StringBuffer code = new StringBuffer(string);         //code--stringbuffer
+            System.out.println("解密中……");
+            recover(string);
+    }
+    static void recover(String code){
+        StringBuffer password = new StringBuffer(code);
+        password = password.reverse();
+
+   //     System.out.println(password);            //交换
+
+
+        String passwordNew = new String(password);
+        char[] codeNew = passwordNew.toCharArray();
+        char random = codeNew[0];
+        codeNew[0] = codeNew[codeNew.length - 1];
+        codeNew[codeNew.length - 1] = random;
+
+  //      System.out.println("=======================");        //交换
+//        for (int i = 0; i < codeNew.length; i++) {
+//            System.out.print(codeNew[i]);
+//        }
+
+ //       System.out.println("\n=================");                                 //
+
+        int count = 0;
+        for (int i = 0; i < codeNew.length; i++) {
+            //      count = codeNew[i] - i - 4;
+            //      codeNew[i] = (char)count;
+            codeNew[i]-= i + 4;
+
+    //        System.out.print(codeNew[i]);                                //偏移
+
+        }
+        String codeRecover = String.copyValueOf(codeNew);
+        System.out.println("解密后的密码："+codeRecover);
+    }
+}
