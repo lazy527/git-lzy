@@ -65,23 +65,12 @@ public class Main {
         char[] codeNew = code.toCharArray();
         int count = 0;
         for (int i = 0; i < codeNew.length; i++) {
-    //      count = codeNew[i] + i + 4;
-    //      codeNew[i] = (char)count;
             codeNew[i]+= i + 4;
-
-//            System.out.print(codeNew[i]);                         //偏移
-
         }
-
- //       System.out.println("\n=======================");            //交换
-
         char random = codeNew[0];
         codeNew[0] = codeNew[codeNew.length - 1];
         codeNew[codeNew.length - 1] = random;
         code = String.copyValueOf(codeNew);
-
-  //      System.out.println(code+"\n============================");            //反转
-
         StringBuffer passwordNew = new StringBuffer(code);
         passwordNew = passwordNew.reverse();
         System.out.println("加密后的密码："+passwordNew);
@@ -97,31 +86,14 @@ public class Main {
     static void recover(String code){
         StringBuffer password = new StringBuffer(code);
         password = password.reverse();
-
-   //     System.out.println(password);            //交换
-
-
         String passwordNew = new String(password);
         char[] codeNew = passwordNew.toCharArray();
         char random = codeNew[0];
         codeNew[0] = codeNew[codeNew.length - 1];
         codeNew[codeNew.length - 1] = random;
-
-  //      System.out.println("=======================");        //交换
-//        for (int i = 0; i < codeNew.length; i++) {
-//            System.out.print(codeNew[i]);
-//        }
-
- //       System.out.println("\n=================");                                 //
-
         int count = 0;
         for (int i = 0; i < codeNew.length; i++) {
-            //      count = codeNew[i] - i - 4;
-            //      codeNew[i] = (char)count;
             codeNew[i]-= i + 4;
-
-    //        System.out.print(codeNew[i]);                                //偏移
-
         }
         String codeRecover = String.copyValueOf(codeNew);
         System.out.println("解密后的密码："+codeRecover);
