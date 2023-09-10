@@ -16,12 +16,12 @@ public class Main {
             choose = sc.next().charAt(0);
             switch (choose) {
                 case '1':
-                    encryption();             //加密
+                    encryption();             			//加密
                     break;
                 case '2':
-                    decode();             // 解密
-                    break;
-                case '5':                      //退出
+                    decode();             			// 解密
+                    break;	
+                case '5':        		                //退出
                     a=false;
                     break;
                 default:
@@ -30,16 +30,16 @@ public class Main {
             }
         }while (a) ;
     }
-    static void encryption(){                            //加密
+    static void encryption(){                                   //加密
         System.out.println("请输入要加密的密码：");
-        Scanner s = new Scanner(System.in);
-        String string = s.nextLine();                      //string -- string
-        StringBuffer code = new StringBuffer(string);      //code --buffer
+        Scanner s = new Scanner(System.in); 
+        String string = s.nextLine();                          //string -- string
+        StringBuffer code = new StringBuffer(string);          //code --buffer
         if(code.length() >= 16){
             System.out.println("密码长度不超过16");
-        } else if (judge(code)) {                  //密码没错
-            System.out.println("加密中……");           //开始加密
-            produce(string);                        //加密
+        } else if (judge(code)) {                              //密码没错
+            System.out.println("加密中……");                    //开始加密
+            produce(string);                                   //加密
         }
     }
     static boolean judge(StringBuffer code){
