@@ -1,27 +1,42 @@
+import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Main {
     public static void main(String[] args) {
         char choose;
+        int n;
         Scanner sc = new Scanner(System.in);
+        char useless;
         boolean a = true;
         do {
-            System.out.println("    ==============================");
-            System.out.println("             欢迎使用密码管理系统      ");
-            System.out.println("    ==============================");
-            System.out.println("               请选择操作：      ");
-            System.out.println("        1.加密      ");
-            System.out.println("        2.解密      ");
-            System.out.println("        5.退出      ");
-            System.out.println("请输入选项：");
+            meun();
             choose = sc.next().charAt(0);
             switch (choose) {
                 case '1':
-                    encryption();             			//加密
+                    encryption();             //加密
+                    System.out.println("\n按任意键返回");
+                    useless = sc.next().charAt(0);
                     break;
                 case '2':
-                    decode();             			// 解密
-                    break;	
-                case '5':        		                //退出
+                    decode();             // 解密
+                    System.out.println("\n按任意键返回");
+                    useless = sc.next().charAt(0);
+                    break;
+                case '3':
+                    JudgeStrength();             // 判断密码强度
+                    System.out.println("\n按任意键返回");
+                    useless = sc.next().charAt(0);
+                    break;
+                case '4':
+                    System.out.println("请输入要生成的密码长度：");
+                    n = sc.nextInt();
+                    generate(n);             // 生成密码
+                    System.out.println("\n按任意键返回");
+                    useless = sc.next().charAt(0);
+                    break;
+                case '5':                      //退出
                     a=false;
                     break;
                 default:
@@ -30,23 +45,38 @@ public class Main {
             }
         }while (a) ;
     }
-    static void encryption(){                                   //加密
+    static void meun(){
+        System.out.println("\n    ==============================");
+        System.out.println("             欢迎使用密码管理系统      ");
+        System.out.println("    ==============================");
+        System.out.println("               请选择操作：      ");
+        System.out.println("        1.加密                ");
+        System.out.println("        2.解密              ");
+        System.out.println("        3.判断密码强度      ");
+        System.out.println("        4.密码生成      ");
+        System.out.println("        5.退出      ");
+        System.out.println("请输入选项：");
+    }
+    static void encryption(){                            //加密
         System.out.println("请输入要加密的密码：");
-        Scanner s = new Scanner(System.in); 
-        String string = s.nextLine();                          //string -- string
-        StringBuffer code = new StringBuffer(string);          //code --buffer
-        if(code.length() >= 16){
-            System.out.println("密码长度不超过16");
-        } else if (judge(code)) {                              //密码没错
-            System.out.println("加密中……");                    //开始加密
-            produce(string);                                   //加密
+        Scanner s = new Scanner(System.in);
+        String string = s.nextLine();                      //string -- string
+        StringBuffer code = new StringBuffer(string);      //code --buffer
+        if (judge(code)) {                  //密码没错
+            produce(string);                        //加密
         }
     }
     static boolean judge(StringBuffer code){
-        for (int i = 0; i< code.length() ; i++) {                 //判断长度
-            if(Problem(code.charAt(i))){
-                System.out.println("非法密码（要数字或字母）");
-                return false;                   //有问题
+        if(code.length() > 16) {
+            System.out.println("密码长度不可超过16");
+            return false;
+        }
+        else{
+            for (int i = 0; i< code.length() ; i++) {          //判断长度
+                if(Problem(code.charAt(i))){
+                    System.out.println("非法密码（要数字或字母）");
+                    return false;                   //有问题
+                }
             }
         }
         return true;                            //没错
@@ -61,7 +91,7 @@ public class Main {
         }
         return false;                         //没错
     }
-    static void produce(String code){
+    static void produce(String code){             //加密2
         char[] codeNew = code.toCharArray();
         int count = 0;
         for (int i = 0; i < codeNew.length; i++) {
@@ -80,12 +110,14 @@ public class Main {
             Scanner sc = new Scanner(System.in);
             String string = sc.nextLine();                        //string--string
             StringBuffer code = new StringBuffer(string);         //code--stringbuffer
-            System.out.println("解密中……");
-            recover(string);
+            if (judge(code)) {                  //密码没错
+                recover(string);                        //反转
+            }
     }
-    static void recover(String code){
+    static void recover(String code){               //       反转(解密2)
         StringBuffer password = new StringBuffer(code);
         password = password.reverse();
+
         String passwordNew = new String(password);
         char[] codeNew = passwordNew.toCharArray();
         char random = codeNew[0];
@@ -94,8 +126,61 @@ public class Main {
         int count = 0;
         for (int i = 0; i < codeNew.length; i++) {
             codeNew[i]-= i + 4;
+
         }
         String codeRecover = String.copyValueOf(codeNew);
         System.out.println("解密后的密码："+codeRecover);
+    }
+    static void generate(int length){              //生成密码
+        String CapitalLettle = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        String LowerLettle = "qwertyuiopasdfghjklzxcvbnm";
+        String Number = "1234567890";
+        Random random = new Random();
+        String passwordRandom = new String() ;
+        char[] password = new char[length];
+        for (int i = 0; i < length; i++) {
+            int randomindex = random.nextInt(3);
+            if(randomindex == 0){
+                passwordRandom = CapitalLettle;
+            }
+            else if(randomindex == 1){
+                passwordRandom =  LowerLettle;
+            }
+            else if(randomindex == 2){
+                passwordRandom = Number;
+            }
+            int passwordindex = random.nextInt(passwordRandom.length());
+            password[i] = passwordRandom.charAt(passwordindex);
+        }
+        System.out.println(password);
+    }
+    static void JudgeStrength(){               //判断密码强度
+        Scanner sc = new Scanner(System.in);
+        System.out.println("请输入密码");
+        String code = sc.next();
+        StringBuffer coding = new StringBuffer(code);      //code --buffer
+        if (judge(coding)) {                  //密码没错
+            String weak ="(?=.*[\\d])|(?=.*([A-Za-z]))" ;
+            String middle = "(?=.*[\\d])(?=.*[A-Za-z])";
+            String strong = "(?=.*[\\d])(?=.*[a-z])(?=.*[A-Z])";
+            Pattern pattern1 = Pattern.compile(strong);
+            Pattern pattern2 = Pattern.compile(middle);
+            Pattern pattern3 = Pattern.compile(weak);
+            Matcher Strong = pattern1.matcher(code);
+            Matcher Middle = pattern2.matcher(code);
+            Matcher Weak = pattern3.matcher(code);
+            if(code.length()<8){
+                System.out.println("弱强度");
+            }
+            else{
+                if (Strong.find()) {
+                    System.out.println("高强度");
+                } else if (Middle.find()) {
+                    System.out.println("中强度");
+                } else if (Weak.find()) {
+                    System.out.println("弱强度");
+                }
+            }
+        }
     }
 }
