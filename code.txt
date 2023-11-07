@@ -1,4 +1,4 @@
-//最新的 上传到远程仓库（5-6周）。
+//最新的 上传到远程仓库（5-6周）
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
