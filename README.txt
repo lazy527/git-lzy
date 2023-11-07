@@ -1,2 +1,2 @@
 I'm learning git.
-week 1-2
+week 1-2、dgxcf
